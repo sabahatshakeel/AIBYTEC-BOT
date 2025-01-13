@@ -202,7 +202,7 @@ elif st.session_state['page'] == 'chat':
                 <div style='display: flex; justify-content: flex-end; margin-bottom: 10px;'>
                     <div style='display: flex; align-items: center; gap: 10px;'>
                         <div style='color: #439DF6;'>👤</div>
-                        <div style='max-width: 70%; 
+                        <div style='max-width: 80%; 
                                     background-color: #439DF6; color: #fff; 
                                     padding: 10px; border-radius: 10px;'>
                             {entry['user']}
@@ -218,7 +218,7 @@ elif st.session_state['page'] == 'chat':
                 <div style='display: flex; justify-content: flex-start; margin-bottom: 10px;'>
                     <div style='display: flex; align-items: center; gap: 10px;'>
                         <div style='color: #4a4a4a;'>🤖</div>
-                        <div style='max-width: 70%; 
+                        <div style='max-width: 80%; 
                                     background-color: #4a4a4a; color: #fff; 
                                     padding: 10px; border-radius: 10px;'>
                             {entry['bot']}
