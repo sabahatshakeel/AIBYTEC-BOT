@@ -346,11 +346,6 @@ def summarize_text(text):
     except Exception as e:
         return f"Error summarizing text: {e}"
 
-# Function to clean HTML from responses
-def clean_html(text):
-    soup = BeautifulSoup(text, "html.parser")
-    return soup.get_text()
-
 # Function to generate OpenAI response
 def chat_with_ai(user_question, website_text, pdf_text, chat_history):
     summarized_pdf_text = summarize_text(pdf_text)
@@ -378,9 +373,12 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
             model="gpt-4",
             messages=messages
         )
-        # Clean HTML tags before returning
-        clean_response = clean_html(response['choices'][0]['message']['content'])
-        return clean_response
+        bot_response = response['choices'][0]['message']['content']
+
+        # Strip any HTML tags from the response
+        cleaned_response = BeautifulSoup(bot_response, "html.parser").get_text()
+        
+        return cleaned_response
     except Exception as e:
         return f"Error generating response: {e}"
 
@@ -481,25 +479,17 @@ elif st.session_state['page'] == 'chat':
                 unsafe_allow_html=True
             )
     
-    # User input form
-    user_input = st.text_input("Your question:", key="user_input")
-    if st.button("Send"):
-        if user_input:
-            website_text = scrape_website(WEBSITE_URL)
-            pdf_text = extract_pdf_text(PDF_PATH)
-            
+    # Load PDF and Website content once
+    pdf_text = extract_pdf_text(PDF_PATH) if os.path.exists(PDF_PATH) else "PDF file not found."
+    website_text = scrape_website(WEBSITE_URL)
+
+    # Fixed input bar at bottom
+    user_input = st.chat_input("Type your question here...", key="user_input_fixed")
+    if user_input:
+        # Display bot's response
+        with st.spinner("Generating response..."):
             bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
-            
-            # Append user question and bot response to chat history
-            st.session_state['chat_history'].append({
-                "user": user_input,
-                "bot": bot_response
-            })
-            
-            # Clear user input after sending
-            st.session_state['user_input'] = ""
-            st.rerun()
-
-
-
-
+        # Append user query and bot response to chat history
+        st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
+        # Re-run to display updated chat history
+        st.rerun()
