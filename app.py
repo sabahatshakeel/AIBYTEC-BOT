@@ -112,9 +112,16 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
 
     Use these sources to answer the user's question accurately and concisely.
     """
+    # messages = [
+    #     {"role": "system", "content": "As an Aibytec chatbot, you are responsible for guiding the user through Aibytec’s services. Your tone should be conversational yet professional, offering easy-to-understand explanations."}
+    # ]
     messages = [
-        {"role": "system", "content": "As an Aibytec chatbot, you are responsible for guiding the user through Aibytec’s services. Your tone should be conversational yet professional, offering easy-to-understand explanations."}
-    ]
+    {
+        "role": "system",
+        "content": "As an Aibytec chatbot, you are responsible for guiding users through Aibytec’s services, including detailed information about the company’s history, office location/address, ownership, team members, and contact info. You will also assist users by providing insights into Aibytec's services, courses, and projects, based on the information from the provided PDF document and the website. Your tone should remain conversational yet professional, offering easy-to-understand explanations. Whenever a user inquires, make sure your responses are based on the information available in the Aibytec resources, ensuring accuracy and helpfulness. Guide users through our various offerings, from services to project details, and provide relevant contact information when requested."
+    }
+]
+
 
     for entry in chat_history[-5:]:
         messages.append({"role": "user", "content": entry['user']})
