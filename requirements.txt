@@ -5,7 +5,8 @@ requests
 langchain==0.0.170
 beautifulsoup4
 python-dotenv
-chromadb
+chromadb==0.3.21
+
 
 
 
