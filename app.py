@@ -254,7 +254,7 @@ from bs4 import BeautifulSoup
 import openai
 import os
 from dotenv import load_dotenv
-import re
+import re  # For validation
 
 # ----------------------
 # Load Environment Variables
@@ -346,10 +346,10 @@ def summarize_text(text):
     except Exception as e:
         return f"Error summarizing text: {e}"
 
-# Function to sanitize HTML tags
-def strip_html_tags(text):
-    # Remove any HTML-like tags from the response
-    return re.sub(r'<.*?>', '', text)
+# Function to clean HTML from responses
+def clean_html(text):
+    soup = BeautifulSoup(text, "html.parser")
+    return soup.get_text()
 
 # Function to generate OpenAI response
 def chat_with_ai(user_question, website_text, pdf_text, chat_history):
@@ -378,8 +378,9 @@ def chat_with_ai(user_question, website_text, pdf_text, chat_history):
             model="gpt-4",
             messages=messages
         )
-        raw_response = response['choices'][0]['message']['content']
-        return strip_html_tags(raw_response)
+        # Clean HTML tags before returning
+        clean_response = clean_html(response['choices'][0]['message']['content'])
+        return clean_response
     except Exception as e:
         return f"Error generating response: {e}"
 
@@ -480,18 +481,25 @@ elif st.session_state['page'] == 'chat':
                 unsafe_allow_html=True
             )
     
-    # Input for new user question
-    with st.form(key="chat_form"):
-        user_question = st.text_input("Your Question:")
-        submit_question = st.form_submit_button("Submit")
-    
-    if submit_question and user_question:
-        website_text = scrape_website(WEBSITE_URL)
-        pdf_text = extract_pdf_text(PDF_PATH)
-        
-        bot_response = chat_with_ai(user_question, website_text, pdf_text, st.session_state['chat_history'])
-        st.session_state['chat_history'].append({"user": user_question, "bot": bot_response})
-        st.rerun()
+    # User input form
+    user_input = st.text_input("Your question:", key="user_input")
+    if st.button("Send"):
+        if user_input:
+            website_text = scrape_website(WEBSITE_URL)
+            pdf_text = extract_pdf_text(PDF_PATH)
+            
+            bot_response = chat_with_ai(user_input, website_text, pdf_text, st.session_state['chat_history'])
+            
+            # Append user question and bot response to chat history
+            st.session_state['chat_history'].append({
+                "user": user_input,
+                "bot": bot_response
+            })
+            
+            # Clear user input after sending
+            st.session_state['user_input'] = ""
+            st.rerun()
+
 
 
 
