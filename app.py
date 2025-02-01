@@ -12,9 +12,10 @@ import re  # For validation
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.text_splitter import CharacterTextSplitter
-# from langchain.chains import RetrievalQAChain 
-from langchain.llms import OpenAI
-from langchain.chains.retrieval_qa import RetrievalQA
+from langchain.chains import RetrievalQAChain 
+# from langchain.llms import OpenAI
+from langchain.chains import LLMChain
+
 
 
 # ----------------------
