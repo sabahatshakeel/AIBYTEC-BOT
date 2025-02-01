@@ -2,7 +2,7 @@ streamlit
 PyPDF2 
 openai==0.27.8 
 requests 
-langchain
+langchain==0.98.1
 beautifulsoup4
 python-dotenv
 chromadb
