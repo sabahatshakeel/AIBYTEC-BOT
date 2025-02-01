@@ -12,7 +12,7 @@ import re  # For validation
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.vectorstores import Chroma
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.chains import RetrievalQAChain 
+from langchain.chains import RetrievalQA 
 # from langchain.llms import OpenAI
 from langchain.chains import LLMChain
 
@@ -105,11 +105,17 @@ def generate_rag_qa(pdf_text, website_text):
     embeddings = OpenAIEmbeddings()
     vectordb = Chroma.from_texts(all_chunks, embeddings)
     retriever = vectordb.as_retriever(search_type="similarity", search_kwargs={"k": 2})
-
-    qa_chain = RetrievalQA(
+    
+    qa_chain = RetrievalQA.from_chain_type(
         retriever=retriever,
+        chain_type="stuff",
         llm=OpenAI(temperature=0, model="gpt-4"),
     )
+
+    # qa_chain = RetrievalQA(
+    #     retriever=retriever,
+    #     llm=OpenAI(temperature=0, model="gpt-4"),
+    # )
     return qa_chain
 
 # Function to handle chatbot conversation with RAG
