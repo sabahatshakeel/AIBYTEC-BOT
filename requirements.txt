@@ -6,7 +6,7 @@ langchain==0.0.170
 beautifulsoup4
 python-dotenv
 chromadb==0.3.21
-
+tiktoken
 
 
 
