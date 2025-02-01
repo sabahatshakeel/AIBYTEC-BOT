@@ -243,7 +243,6 @@
 #         # Re-run to display updated chat history
 #         st.rerun()
 
-
 import streamlit as st
 import smtplib
 from email.mime.text import MIMEText
@@ -493,3 +492,6 @@ elif st.session_state['page'] == 'chat':
         st.session_state['chat_history'].append({"user": user_input, "bot": bot_response})
         # Re-run to display updated chat history
         st.rerun()
+
+
+   
