@@ -1,6 +1,6 @@
 streamlit 
 PyPDF2 
-openai==0.27.8 
+openai==0.27.0 
 requests 
 langchain==0.98.1
 beautifulsoup4
